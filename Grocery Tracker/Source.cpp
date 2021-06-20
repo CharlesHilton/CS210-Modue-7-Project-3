@@ -6,7 +6,8 @@
 
 using namespace std;
 
-const char frequencyFile[] = "Frequency";
+const char frequencyFile[] = "Frequency";	// Module name for Frequency Python module ("Frequency.py")
+const char itemFile[] = "ItemsPurchased.txt";
 
 /*
 Description:
@@ -57,7 +58,7 @@ int callIntFunc(string proc, string param)
 	// Initialize the Python Interpreter
 	Py_Initialize();
 	// Build the name object
-	pName = PyUnicode_FromString((char*)frequencyFile);
+	pName = PyUnicode_FromString(frequencyFile);
 	// Load the module object
 	pModule = PyImport_Import(pName);
 	// pDict is a borrowed reference 
@@ -108,7 +109,7 @@ int callIntFunc(string proc, int param)
 	// Initialize the Python Interpreter
 	Py_Initialize();
 	// Build the name object
-	pName = PyUnicode_FromString((char*)frequencyFile);
+	pName = PyUnicode_FromString(frequencyFile);
 	// Load the module object
 	pModule = PyImport_Import(pName);
 	// pDict is a borrowed reference 
@@ -140,11 +141,31 @@ int callIntFunc(string proc, int param)
 	return _PyLong_AsInt(presult);
 }
 
+void menu() {
+	int userInput = 0;
 
-void main()
-{
-	CallProcedure("printsomething");
-	cout << callIntFunc("PrintMe","House") << endl;
-	cout << callIntFunc("SquareValue", 2);
+	while (true) {
+		cout << endl << "Please make a selection: " << endl;
+		cout	<< "1: Display list of items and quantity purchased." << endl
+				<< "2: " << endl
+				<< "3: " << endl
+				<< "4:  Exit." << endl;
+		cin >> userInput;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore();
+			cout << endl << "Invalid entry. Please try again." << endl;
+			continue;
+		}
+	}
 
+
+}
+
+void main() {
+	//CallProcedure("printsomething");
+	//cout << callIntFunc("PrintMe","House") << endl;
+	//cout << callIntFunc("SquareValue", 2);
+
+	menu();
 }
