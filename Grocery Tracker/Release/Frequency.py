@@ -65,4 +65,4 @@ def DisplayHistogram():     # Displays a histogram... Would have been the easier
 #DisplayItems("ItemsPurchased.txt")
 #print(groceryItems)
 #DisplayHistogram()
-WriteFrequencyFile()
+#WriteFrequencyFile()

@@ -1,14 +1,18 @@
 #include <Python.h>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
 #include <Windows.h>
 #include <cmath>
 #include <string>
+#include <vector>
+#include <tuple>
 
 using namespace std;
 
-const char frequencyPyFile[] = "Frequency";			// Module name for Frequency Python module ("Frequency.py")
-const char itemFile[] = "ItemsPurchased.txt";		// File that stores items to be read in.
-const char frequencyDataFile[] = "frequency.dat";	// File that stores the itmes and their quantity
+const char frequencyPyFile[]	= "Frequency";				// Module name for Frequency Python module ("Frequency.py")
+const char itemFile[]			= "ItemsPurchased.txt";		// File that stores items to be read in.
+const char frequencyDataFile[]	= "frequency.dat";			// File that stores the itmes and their quantity
 
 /*
 Description:
@@ -162,11 +166,37 @@ void GetItemCountMenu() {
 }
 
 void DisplayHistogram() {	// Display a histogram by reading, writing then reading a file again...
+	string item = "";
+	unsigned int quantity;
+	unsigned int maxItemStrLen = 0;
+	vector<tuple<string, unsigned int> > items;
+
 	CallProcedure("WriteFrequencyFile");
+
+	ifstream inFS;
+	inFS.open(frequencyDataFile);
+	if (!inFS.is_open()) {							// Check to make sure the file is open.
+		cout << "Could not open file." << endl;
+	}
+
+	cout << "Histogram" << endl
+		 << "---------" << endl;
+	while (!inFS.fail()) {								// Read in the file...
+		inFS >> item >> quantity;
+		if (inFS.fail()) {break;}						// Break if input fails, typically if the the end of file is reached and the last line is empty.
+		if (item.length() > maxItemStrLen) { maxItemStrLen = item.length(); }
+		items.push_back(make_tuple(item, quantity));
+	}
+	inFS.close();
+
+	for (auto i = 0; i < items.size(); ++i) {	// Display each item for the histogram.
+		tie(item, quantity) = items[i];
+		cout << right << setw(maxItemStrLen) << item << ": " << string(quantity, '*') << endl;
+	}
 
 }
 
-void menu() {
+void GroceryMenu() {
 	int userInput = 0;
 
 	while (userInput != 4) {
@@ -204,5 +234,5 @@ void main() {
 	//cout << callIntFunc("PrintMe","House") << endl;
 	//cout << callIntFunc("SquareValue", 2);
 
-	menu();
+	GroceryMenu();	
 }
