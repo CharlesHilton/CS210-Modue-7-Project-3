@@ -166,15 +166,16 @@ void GetItemCountMenu() {
 }
 
 void DisplayHistogram() {	// Display a histogram by reading, writing then reading a file again...
-	string item = "";
-	unsigned int quantity;
-	unsigned int maxItemStrLen = 0;
-	vector<tuple<string, unsigned int> > items;
+	string item = "";								// Item description.
+	unsigned int quantity;							// Item quantity.
+	unsigned int maxItemStrLen = 0;					// Longest item string length aid in formating output.
+	vector<tuple<string, unsigned int> > items;		// Vector of tuples to store items.
 
-	CallProcedure("WriteFrequencyFile");
+	CallProcedure("WriteFrequencyFile");			// Write out the frequency data file using Python.
 
-	ifstream inFS;
-	inFS.open(frequencyDataFile);
+	ifstream inFS;	// Input file stream.
+	inFS.open(frequencyDataFile);	// Open the file.
+
 	if (!inFS.is_open()) {							// Check to make sure the file is open.
 		cout << "Could not open file." << endl;
 	}
@@ -189,24 +190,24 @@ void DisplayHistogram() {	// Display a histogram by reading, writing then readin
 	}
 	inFS.close();
 
-	for (auto i = 0; i < items.size(); ++i) {	// Display each item for the histogram.
-		tie(item, quantity) = items[i];
+	for (size_t i = 0; i < items.size(); ++i) {	// Display each item for the histogram.
+		tie(item, quantity) = items[i];			// Pull the data back out of the vector.
 		cout << right << setw(maxItemStrLen) << item << ": " << string(quantity, '*') << endl;
 	}
 
 }
 
-void GroceryMenu() {
+void GroceryMenu() {	// Display the main menu for the Grocery application.
 	int userInput = 0;
 
-	while (userInput != 4) {
+	while (userInput != 4) {		// Display menu and validate input.
 		cout << endl << "Please make a selection: " << endl;
 		cout	<< "1: Display list of items and quantity purchased." << endl
 				<< "2: Get specific item quantity." << endl
 				<< "3: Display Item Histogram." << endl
 				<< "4: Exit." << endl;
 		cin >> userInput;
-		if (cin.fail()) {
+		if (cin.fail()) {	// Handle invalid entries.
 			cin.clear();
 			cin.ignore();
 			cout << endl << "Invalid entry. Please try again." << endl;
@@ -214,13 +215,13 @@ void GroceryMenu() {
 		}
 
 		switch (userInput) {
-		case 1:
+		case 1:								// Display items.
 			CallProcedure("DisplayItems");
 			break;
-		case 2:
+		case 2:								// Search for specific items.
 			GetItemCountMenu();
 			break;
-		case 3:
+		case 3:								// Display Histogram.
 			DisplayHistogram();
 			break;
 		default:
@@ -230,9 +231,5 @@ void GroceryMenu() {
 }
 
 void main() {
-	//CallProcedure("printsomething");
-	//cout << callIntFunc("PrintMe","House") << endl;
-	//cout << callIntFunc("SquareValue", 2);
-
-	GroceryMenu();	
+	GroceryMenu();	// Launch Grocery Menu.
 }

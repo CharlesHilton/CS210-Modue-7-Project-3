@@ -4,16 +4,6 @@ import string
 itemsFile = "ItemsPurchased.txt"
 groceryItems = {} # Empty dictionary to contain all grocery items and count.
 
-def printsomething():
-    print("Hello from python!")
-
-def PrintMe(v):
-    print("You sent me: " + v)
-    return 100;
-
-def SquareValue(v):
-    return v * v
-
 def ReadItems(file):
     inFile = open(file)         # Open grocery list.
     lines = inFile.readlines()  # Read in list.
@@ -25,11 +15,11 @@ def ReadItems(file):
         except KeyError as s:
             groceryItems[item] = 1                          # Add item if its not in the dictionary.
 
-def DisplayItems():
+def DisplayItems():         # Display Items and Quantity.
     ReadItems(itemsFile)
     print("\nItems")
     print("-----")
-    for item in sorted(groceryItems):
+    for item in sorted(groceryItems):   # Display each item and its quantity...
         print("{}: {}".format(item, groceryItems[item]))
     return 0
 
@@ -41,11 +31,11 @@ def GetItemCount(item):     # Returns the quantity of an item.
         print("Could not find item. Error: {}".format(s))
         return 0
 
-def WriteFrequencyFile():
+def WriteFrequencyFile():   # Write the Frequency Data file.
     ReadItems(itemsFile)
 
     dataFile = open("frequency.dat",'w')
-    for item in sorted(groceryItems):
+    for item in sorted(groceryItems):       # Write out the data...
         dataFile.write("{} {}\n".format(item, groceryItems[item]))
     dataFile.close()
 
@@ -60,9 +50,3 @@ def DisplayHistogram():     # Displays a histogram... Would have been the easier
     print("---------")
     for item in sorted(groceryItems):                                                       # Process the items in grocery items.
         print("{}: {}".format( item.rjust(maxKeyLen,' '), ("*" * groceryItems[item]) ))     # Print each item with an '*' for the quantity.
-
-
-#DisplayItems("ItemsPurchased.txt")
-#print(groceryItems)
-#DisplayHistogram()
-#WriteFrequencyFile()
