@@ -6,8 +6,9 @@
 
 using namespace std;
 
-const char frequencyFile[] = "Frequency";	// Module name for Frequency Python module ("Frequency.py")
-const char itemFile[] = "ItemsPurchased.txt";
+const char frequencyPyFile[] = "Frequency";			// Module name for Frequency Python module ("Frequency.py")
+const char itemFile[] = "ItemsPurchased.txt";		// File that stores items to be read in.
+const char frequencyDataFile[] = "frequency.dat";	// File that stores the itmes and their quantity
 
 /*
 Description:
@@ -25,7 +26,7 @@ void CallProcedure(string pName)
 	std::strcpy(procname, pName.c_str());
 
 	Py_Initialize();
-	PyObject* my_module = PyImport_ImportModule(frequencyFile);
+	PyObject* my_module = PyImport_ImportModule(frequencyPyFile);
 	PyErr_Print();	
 	PyObject* my_function = PyObject_GetAttrString(my_module, procname);
 	PyObject* my_result = PyObject_CallObject(my_function, NULL);
@@ -58,7 +59,7 @@ int callIntFunc(string proc, string param)
 	// Initialize the Python Interpreter
 	Py_Initialize();
 	// Build the name object
-	pName = PyUnicode_FromString(frequencyFile);
+	pName = PyUnicode_FromString(frequencyPyFile);
 	// Load the module object
 	pModule = PyImport_Import(pName);
 	// pDict is a borrowed reference 
@@ -109,7 +110,7 @@ int callIntFunc(string proc, int param)
 	// Initialize the Python Interpreter
 	Py_Initialize();
 	// Build the name object
-	pName = PyUnicode_FromString(frequencyFile);
+	pName = PyUnicode_FromString(frequencyPyFile);
 	// Load the module object
 	pModule = PyImport_Import(pName);
 	// pDict is a borrowed reference 
@@ -141,15 +142,39 @@ int callIntFunc(string proc, int param)
 	return _PyLong_AsInt(presult);
 }
 
+void GetItemCountMenu() {
+	string userString;	// String to store user input.
+	int itemCount = 0;	// Item count.
+
+	while (true) {												// Prompt for item name.
+		cout << endl << "Enter the name of the item: ";
+		cin >> userString;
+		if (cin.fail()) {
+			cin.clear();
+			cin.ignore();
+			cout << endl << "Invalid entry. Please try again." << endl;
+			continue;
+		}
+		break;
+	}
+
+	cout << "Quantity: " << callIntFunc("GetItemCount", userString) << endl;	// Outout result.
+}
+
+void DisplayHistogram() {	// Display a histogram by reading, writing then reading a file again...
+	CallProcedure("WriteFrequencyFile");
+
+}
+
 void menu() {
 	int userInput = 0;
 
-	while (true) {
+	while (userInput != 4) {
 		cout << endl << "Please make a selection: " << endl;
 		cout	<< "1: Display list of items and quantity purchased." << endl
-				<< "2: " << endl
-				<< "3: " << endl
-				<< "4:  Exit." << endl;
+				<< "2: Get specific item quantity." << endl
+				<< "3: Display Item Histogram." << endl
+				<< "4: Exit." << endl;
 		cin >> userInput;
 		if (cin.fail()) {
 			cin.clear();
@@ -157,9 +182,21 @@ void menu() {
 			cout << endl << "Invalid entry. Please try again." << endl;
 			continue;
 		}
+
+		switch (userInput) {
+		case 1:
+			CallProcedure("DisplayItems");
+			break;
+		case 2:
+			GetItemCountMenu();
+			break;
+		case 3:
+			DisplayHistogram();
+			break;
+		default:
+			break;
+		}
 	}
-
-
 }
 
 void main() {
